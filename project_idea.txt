@@ -1,0 +1,35 @@
+Proposal: "From Page to Screen: The Evolution of Book Adaptations in Cinema"
+
+Overall Goal: To analyze the complex relationship between literature and film, focusing on how book-to-movie adaptations have evolved over time and their impact on the film industry.
+
+Research Questions: 
+- How has the prevalence and representation of book adaptations in cinema changed since the early 20th century?
+- Is there a correlation between a book's popularity and critical acclaim with the success of its film adaptation? 
+- How well do film adaptations fare compared to original movie works?
+- How do adaptations of different literary genres perform compared to original screenplays?
+- Has the time gap between book publication and film adaptation changed over the years? 
+- How faithfully do movie adaptations preserve the core elements of their source material?
+
+Data Preparation and Sources:
+- Enrich the CMU Movie dataset with external sources such as the Kaggle Movie dataset, book sales data, literary awards, and book ratings from platforms like Goodreads.
+- Use the Wikipedia list of feature film adaptations to identify movie adaptations
+
+Analysis Techniques:
+- Time series analysis to track trends in book adaptations over decades.
+- Sentiment analysis on plot summaries to compare emotional tones between books and their adaptations.
+- Network analysis to visualize connections between authors, directors, and genres.
+- Regression analysis to identify factors contributing to successful adaptations.
+
+Proposed Visualizations: 
+- Interactive timeline showing the evolution of book adaptations in cinema. 
+- Heatmap comparing book ratings to movie ratings for adaptations.
+- Network graph illustrating connections between popular authors and successful directors/producers. 
+- Scatter plot of time gaps between book publication and movie release dates over the years.
+
+Potential Insights: 
+- Identify golden ages of adaptation for different literary genres. 
+- Uncover patterns in how different types of books translate to box office success. 
+- Reveal how closely movie adaptations stick to their source material across different eras and whether this has an impact on the success of the film.
+- Explore how the relationship between the publishing and film industries has evolved.
+By exploring the intricate relationship between literary works and cinematic works, this project aims to illuminate not just the evolution of adaptations, but the changing relationship between two of the most influential storytelling mediums of the past century.
+Through a combination of data analysis and visualization, we hope to craft a compelling narrative about how our favorite stories make the leap from the page to image, and what that journey reveals about our evolving cultural landscape.
