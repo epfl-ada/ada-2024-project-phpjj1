@@ -11,7 +11,7 @@ load_dotenv()
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 TMDB_READ_ACCESS_TOKEN = os.getenv("TMDB_READ_ACCESS_TOKEN")
 
-with open("../data/booksmovies_list.txt", "r") as f:
+with open("../../data/booksmovies_list.txt", "r") as f:
     adaptations = f.read().splitlines()
 
 async def make_request(session, page: int):
@@ -51,7 +51,7 @@ async def main():
             # Small delay between batches to avoid rate limits
             await asyncio.sleep(0.5)
         
-        with open("../data/tmdb_data.json", "w") as f:
+        with open("../../data/tmdb_data.json", "w") as f:
             json.dump(all_results, f, indent=2)
             print(f"Saved {len(all_results)} pages to tmdb_data.json")
 
