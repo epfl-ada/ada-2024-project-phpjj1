@@ -3,3 +3,9 @@
 
 #ignore the data folder
 data/
+
+# secrets and tokens
+.env
+
+.venv/
+__pycache__/
