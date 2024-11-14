@@ -133,3 +133,15 @@ The directory structure of our project looks like this:
 ├── pip_requirements.txt        <- File for installing python dependencies
 └── README.md
 ```
+
+## Downloading Raw Datasets
+
+**Primary Dataset**: [CMU Movie Summary Corpus](https://www.cs.cmu.edu/~ark/personas/) (`MovieSummaries`)
+
+#### Secondary Datasets:
+- [MovieLens 32M Dataset](https://grouplens.org/datasets/movielens/#:~:text=for%20new%20research-,MovieLens%2032M,-MovieLens%2032M%20movie) (`ml-32m`)
+
+
+For each dataset, download the zip file and place it in the root level `data` directory. Do NOT rename the unzipped folder.
+
+Create folder `data/processed` to store the processed datasets. You need this or else the merging script will fail.

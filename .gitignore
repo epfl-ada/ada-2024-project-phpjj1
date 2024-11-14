@@ -1,3 +1,6 @@
 .DS_Store
 .ipynb_checkpoints/
 /data/
+.env
+.venv/
+__pycache__/
