@@ -7,7 +7,7 @@ Our project primarily utilizes the CMU movie data set, which includes movie plot
 
 ## Research Questions
 - What are the predominant emotional tones used in films and how do they vary across different movie genres?  
-- How has the overall tone of films evolved over time within each genre?  
+- How has the emotional tone of films evolved over time within each genre?  
 - How does the emotional tone of films influence the selection of actor traits, such as age and gender?  
 - Does the emotional tone of films differ between movies in different languages?  
 - Can films be clustered based on their emotional tone, and do these clusters reveal distinct patterns in consumer ratings?
@@ -15,7 +15,6 @@ Our project primarily utilizes the CMU movie data set, which includes movie plot
 By answering these questions, we hope to provide insights into how emotional tones shape cinematic experiences, influence casting decisions, and connect with audiences globally.
 
 ## Data
-<!-- From the provided CMU Movie Summary Corpus, we use the movie metadata, the character metadata, and the movie plot summaries. We decided to merge them by a left join to initially not lose any data and handle resulting missing values by grouping. We explored each of the three datasets with initial exploratory data analysis to find missing values and distributions of important columns. -->
 From the provided CMU Movie Summary Corpus, we use the movie metadata, the character metadata, and the movie plot summaries. We decided to merge them by a left join to initially not lose any data and handle resulting missing values by grouping. We explored each of the three datasets with initial exploratory data analysis to find missing values and generate relevant plots.
 
 We decided to use user ratings to measure the success of a movie instead of financial revenue, because the latter can be highly influenced by good marketing and famous actors and therefore is not the best indicator of whether people truly liked the movie. In our main dataset, there are no user ratings, so we decided to merge it with the [MovieLens dataset](https://grouplens.org/datasets/movielens/32m/). This dataset contains 32 million movie ratings for 87,585 movies. We merge the datasets based on a cleaned title and the release year of the movie.
@@ -23,7 +22,6 @@ We decided to use user ratings to measure the success of a movie instead of fina
 ## Methods
 
 ### Natural Language Processing
-<!-- To uncover how films use emotions and analyze their evolution and impact, we first detect emotions from the movie plot summaries sourced from Wikipedia. The movie metadata is merged with character metadata and plot summaries to create a unified dataset. Emotions are then extracted using the pre-trained [j-hartmann/emotion-english-distilroberta-base](https://huggingface.co/j-hartmann/emotion-english-distilroberta-base) model from Hugging Face. It predicts Ekman’s 6 basic emotions as well as a neutral class. -->
 To uncover how films use emotions and analyze their evolution and impact, we first detect emotions from movie plot summaries sourced from Wikipedia. The movie metadata is merged with character metadata and plot summaries to create a unified dataset. Emotions are then extracted using various pre-trained models:
 - **[j-hartmann/emotion-english-distilroberta-base](https://huggingface.co/j-hartmann/emotion-english-distilroberta-base)**:  
   This model predicts Ekman's six basic emotions (anger, disgust, fear, joy, sadness, surprise) along with a neutral class, making it ideal for capturing foundational emotional elements in movie plots.
@@ -44,9 +42,6 @@ To examine how the use of emotions has evolved across genres over time, we will 
 
 ### Regression Analysis
 The impact of emotions on the actor traits age and gender is analyzed using regression analysis. This method assesses relationships between the emotional tones of films and the age and gender of involved actors. Additionally, regression analysis may be used to explore connections between movie languages and emotional tones, complementing the chi-squared test described below.
-
-### Chi-Squared Test
-To investigate the relationship between movie language and emotional tones, a chi-square test will be conducted. This test will evaluate whether the distribution of emotions differs significantly across languages, under the null hypothesis that language has no impact on emotional tone. Based on the results, regression analysis may be employed for visualization and further exploration.
 
 ### Clustering
 To explore the connection between emotional tones and user ratings, we will cluster movies based on their emotional profiles. Patterns between clusters and user ratings are examined to determine how the different emotions influence user ratings and how the influence may vary across genres.

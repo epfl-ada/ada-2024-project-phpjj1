@@ -1,12 +1,8 @@
-# I think the emotion analysis is very important to have the emotions as attribute for each movie, describe the classes that exist and an initial analysis for research question 1 would be great so what are the most common emotional tones and how do they differ between genres
-
 # Lexicon source is (C) 2016 National Research Council Canada (NRC) and this package is for research purposes only. Source: http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm As per the terms of use of the NRC Emotion Lexicon, if you use the lexicon or any derivative from it, cite this paper: Crowdsourcing a Word-Emotion Association Lexicon, Saif Mohammad and Peter Turney, Computational Intelligence, 29 (3), 436-465, 2013.
 
-import os
 import nltk
 from nrclex import NRCLex
 from transformers import pipeline, AutoTokenizer
-import torch
 
 roberta_classifier = pipeline(
         "text-classification", 
@@ -75,6 +71,3 @@ def get_emotions_distilbert(text: str) -> dict[str, float]:
 if __name__ == "__main__":
     print(get_emotions_roberta("I'm so happy and excited about this!"))
     print(get_emotions_nrclex("I'm so happy and excited about this!"))
-
-
-
