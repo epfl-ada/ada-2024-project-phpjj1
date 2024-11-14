@@ -11,11 +11,16 @@ import torch
 roberta_classifier = pipeline(
         "text-classification", 
         model="SamLowe/roberta-base-go_emotions", 
-        top_k=28 # always return all 28 emotions
+        top_k=28, # always return all 28 emotions
+        tokenizer=AutoTokenizer.from_pretrained("SamLowe/roberta-base-go_emotions"),
+        truncation=True 
     )
 
-# Initialize tokenizer to handle plot summaries that are too long
-tokenizer = AutoTokenizer.from_pretrained("SamLowe/roberta-base-go_emotions")
+distilbert_classifier = pipeline("text-classification", 
+                      model="j-hartmann/emotion-english-distilroberta-base", 
+                      return_all_scores=True,
+                      tokenizer=AutoTokenizer.from_pretrained("j-hartmann/emotion-english-distilroberta-base"),
+                      truncation=True)
 
 # Required for nrclex
 try:
@@ -38,26 +43,33 @@ def get_emotions_roberta(text: str) -> dict[str, float]:
     """
     Get all 28 emotions from text using HuggingFace's RoBERTa model, trained on Reddit data.
     Returns emotions with their scores in a dict format. 500MB model size.
-    
-    Example output:
-    ```
-    {'fear': 0.0, 'anger': 0.0, 'anticipation': 0.0, 'trust': 0.0, 'surprise': 0.0, 
-     'positive': 0.5, 'negative': 0.0, 'sadness': 0.0, 'disgust': 0.0, 'joy': 0.5}
-    ```
     """
-    # Check if given text is really a string
-    if not isinstance(text, str):
-        return None
-
-    # Use truncation for plot summaries that exceed the 514 token limit
-    encoded_input = tokenizer(text, truncation=True, max_length=514, return_tensors="pt")
-    results = roberta_classifier(encoded_input['input_ids'])
+    results = roberta_classifier(text)
     results = results[0]
 
     return {result['label']: result['score'] for result in results}
     
 
+def get_emotions_distilbert(text: str) -> dict[str, float]:
+    """
+    Get Ekman's 6 emotions and a neutral class from text using HuggingFace's DistilRoBERTa model.
+    Returns emotions with their scores in a dict format.
+    
+    Example output:
+    ```
+    {'label': 'anger', 'score': 0.004419783595949411},
+    {'label': 'disgust', 'score': 0.0016119900392368436},
+    {'label': 'fear', 'score': 0.0004138521908316761},
+    {'label': 'joy', 'score': 0.9771687984466553},
+    {'label': 'neutral', 'score': 0.005764586851000786},
+    {'label': 'sadness', 'score': 0.002092392183840275},
+    {'label': 'surprise', 'score': 0.008528684265911579}
+    ```
+    """
+    results = distilbert_classifier(text)
+    results = results[0]
 
+    return {result['label']: result['score'] for result in results}
     
 
 if __name__ == "__main__":
