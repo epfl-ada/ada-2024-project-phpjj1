@@ -34,7 +34,7 @@ To uncover how films use emotions and analyze their evolution and impact, we fir
 - **NRCLex** ([source](https://pypi.org/project/NRCLex/)):  
   Predicts fear, anger, anticipation, trust, surprise, positive/negative sentiment, sadness, disgust, and joy.
 
-For Milestone 2, we will evaluate each model's performance to determine the most suitable approach for our dataset. Additionally, for now in Milestone 2, we are going to run models on subset of plot summaries due to high computational cost. In Milestone 3, we will select a final model based on these evaluations.
+For Milestone 2, we will evaluate each model's performance to determine the most suitable approach for our dataset. Additionally, for now in Milestone 2, we are going to run models on subset of plot summaries due to high computational cost. We will then choose the final model based on evaluations and run it on the whole summary plot data using external resources for Milestone 3.
 
 ### Aggregation and Comparison
 To explore the connections between genres and emotions, the extracted emotional data is aggregated at the genre level. The resulting emotional profiles are then compared across genres to identify differences and patterns.
