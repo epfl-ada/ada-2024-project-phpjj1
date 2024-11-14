@@ -87,7 +87,7 @@ To explore the connection between emotional tones and user ratings, we will clus
 N/A
 
 
-# Quickstart
+## Quickstart
 
 ```bash
 # clone project
@@ -120,6 +120,7 @@ The directory structure of our project looks like this:
 │   ├── MovieSummaries                    <- Contains the CMU Movie data
 │
 ├── src                         <- Source code
+├   ├── results.ipynb                   <- Our result notebook
 │   ├── data                            <- Data directory
 │   ├── models                          <- Model directory
 │   ├── utils                           <- Utility directory
@@ -127,7 +128,6 @@ The directory structure of our project looks like this:
 │
 ├── tests                       <- Tests of any kind
 │
-├── results.ipynb               <- Our result notebook
 │
 ├── .gitignore                  <- List of files ignored by git
 ├── pip_requirements.txt        <- File for installing python dependencies
