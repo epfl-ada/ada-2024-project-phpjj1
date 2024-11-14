@@ -1,3 +1,6 @@
+# Project-phpjj1
+This is the ADA 2024/25 project repository for the group phpjj1.
+
 # How Movies are Built: The Emotional Landscape in Cinema
 
 ## Abstract
@@ -41,7 +44,7 @@ To explore the connections between genres and emotions, the extracted emotional 
 To examine how the use of emotions has evolved across genres over time, we will perform a time series analysis. Emotional scores for each genre will be aggregated by release year, enabling us to identify trends and shifts in emotional tones over the decades.
 
 ### Regression Analysis
-The impact of emotions on the actor traits age and gender is analyzed using regression analysis. This method assesses relationships between the emotional tones of films and the age and gender of involved actors. Additionally, regression analysis may be used to explore connections between movie languages and emotional tones, complementing the chi-squared test described below.
+The impact of emotions on the actor traits age and gender is analyzed using regression analysis. This method assesses relationships between the emotional tones of films and the age and gender of involved actors. Additionally, regression analysis will be used to explore connections between movie languages and emotional tones.
 
 ### Clustering
 To explore the connection between emotional tones and user ratings, we will cluster movies based on their emotional profiles. Patterns between clusters and user ratings are examined to determine how the different emotions influence user ratings and how the influence may vary across genres.
@@ -50,6 +53,7 @@ To explore the connection between emotional tones and user ratings, we will clus
 
 ### 15.11.2024 - 22.11.2024
 - Homework
+- Extraction of emotions for all movie plots
 
 ### 22.11.2024 - 29.11.2024
 - Creation of emotional profiles for each movie through the extracted emotions  
@@ -58,8 +62,7 @@ To explore the connection between emotional tones and user ratings, we will clus
 - Perform time series analysis on aggregated data  
 
 ### 29.11.2024 - 06.12.2024
-- Regression analysis between emotional profiles and the actor traits gender and age  
-- Chi-squared test between different emotions and movie language  
+- Regression analysis between emotional profiles and the actor traits gender and age   
 - Visualization of results  
 
 ### 06.12.2024 - 13.12.2024
@@ -81,4 +84,52 @@ To explore the connection between emotional tones and user ratings, we will clus
 - **Levin**:  
 
 ## Questions for the TA
-- N/A
+N/A
+
+
+# Quickstart
+
+```bash
+# clone project
+git clone <project link>
+cd <project repo>
+
+# [OPTIONAL] create conda environment
+conda create -n <env_name> python=3.11 or ...
+conda activate <env_name>
+# Necessary if using a conda environment otherwise pip will install packages globally even if the conda environment is active
+conda install pip
+
+
+# install requirements
+pip install -r pip_requirements.txt
+```
+
+### How to use the library
+To use the code, the data mentioned above in the data section has to be downloaded. Make sure to place all data in the root data folder (for details look below) and put all datafiles from the CMU Movie dataset into a folder named `MovieSummaries`. For the MovieLens dataset put all files in a folder named `ml-32m`.
+
+
+
+## Project Structure
+
+The directory structure of our project looks like this:
+
+```
+├── data                        <- Project data files
+│   ├── ml-32m                            <- Contains the MovieLens data
+│   ├── MovieSummaries                    <- Contains the CMU Movie data
+│
+├── src                         <- Source code
+│   ├── data                            <- Data directory
+│   ├── models                          <- Model directory
+│   ├── utils                           <- Utility directory
+│   ├── scripts                         <- Shell scripts
+│
+├── tests                       <- Tests of any kind
+│
+├── results.ipynb               <- Our result notebook
+│
+├── .gitignore                  <- List of files ignored by git
+├── pip_requirements.txt        <- File for installing python dependencies
+└── README.md
+```
