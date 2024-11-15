@@ -4,7 +4,7 @@ This is the ADA 2024/25 project repository for the group phpjj1.
 # How Movies are Built: The Emotional Landscape in Cinema
 
 ## Abstract
-In cinema, emotions are not merely a component of storytelling but the foundation upon which entire films are constructed. This project aims to analyze how movies are built based on different emotions across genres and how these emotions have evolved over time. Additionally, it seeks to uncover relationships between the emotional profiles of movies and factors such as language, as well as the age and gender of the actors involved. To fully understand the impact of emotions in films, we will also explore how these emotions influence a movie’s success, as measured by user ratings.
+In cinema, emotions are not merely a component of storytelling but the foundation upon which entire films are constructed. This project aims to analyze how movies are built based on different emotions across genres and how these emotions have evolved over time. Additionally, it seeks to uncover relationships between emotional tones in movies and factors such as language, as well as the age and gender of involved actors. To fully understand the impact of emotions in films, we will also explore how these emotions influence a movie’s success, as measured by user ratings.
 
 Our project primarily utilizes the CMU movie data set, which includes movie plot summaries sourced from Wikipedia, that are used to extract the emotions of a film. This data is enriched with an external dataset containing user ratings. Through this analysis, we aim to show how leveraging emotional narratives can be used to produce the next blockbuster.
 
