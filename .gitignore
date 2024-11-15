@@ -1,11 +1,6 @@
 .DS_Store
 .ipynb_checkpoints/
-
-#ignore the data folder
-data/
-
-# secrets and tokens
+/data/
 .env
-
 .venv/
 __pycache__/
