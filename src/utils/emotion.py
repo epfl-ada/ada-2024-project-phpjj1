@@ -12,17 +12,18 @@ roberta_classifier = pipeline(
         truncation=True 
     )
 
-distilbert_classifier = pipeline("text-classification", 
-                      model="j-hartmann/emotion-english-distilroberta-base", 
-                      return_all_scores=True,
-                      tokenizer=AutoTokenizer.from_pretrained("j-hartmann/emotion-english-distilroberta-base"),
-                      truncation=True)
+distilbert_classifier = pipeline(
+                    "text-classification", 
+                    model="j-hartmann/emotion-english-distilroberta-base", 
+                    top_k = None,
+                    tokenizer=AutoTokenizer.from_pretrained("j-hartmann/emotion-english-distilroberta-base"),
+                    truncation=True)
 
 # Required for nrclex
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt')
+# try:
+#     nltk.data.find('tokenizers/punkt')
+# except LookupError:
+nltk.download('punkt', quiet=True)
 
 def get_emotions_nrclex(text: str) -> dict[str, float]:
     """
