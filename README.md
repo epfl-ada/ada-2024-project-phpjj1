@@ -55,14 +55,14 @@ To explore the connection between emotional tones and user ratings, we will clus
 - Homework
 - Extraction of emotions for all movie plots
 
-### 22.11.2024 - 29.11.2024
-- Creation of emotional profiles for each movie through the extracted emotions  
-- Comparison of profiles across genres, including visualizations  
+### 22.11.2024 - 29.11.2024  
+- Comparison of emotions across genres, including visualizations  
 - Aggregate emotions by release date  
 - Perform time series analysis on aggregated data  
 
 ### 29.11.2024 - 06.12.2024
-- Regression analysis between emotional profiles and the actor traits gender and age   
+- Regression analysis between emotional tones and the actor traits gender and age
+- Regression analysis between emotional tones and the language of a movie
 - Visualization of results  
 
 ### 06.12.2024 - 13.12.2024
@@ -77,11 +77,11 @@ To explore the connection between emotional tones and user ratings, we will clus
 - Code and repository cleaning  
 
 ## Organization of Tasks Across the Team
-- **Fillipo**:  
-- **Freeman**:  
-- **Julian**:  
-- **Sean**:  
-- **Levin**:  
+- **Filippo**: Time Series Analysis and complete emotion detection 
+- **Freeman**: Clustering of emotions and data story
+- **Julian**: Regression analysis and clustering
+- **Sean**: Emotion aggregation and visualizations
+- **Levin**: Regression analysis and data story
 
 ## Questions for the TA
 N/A
@@ -106,7 +106,7 @@ pip install -r pip_requirements.txt
 ```
 
 ### How to use the library
-To use the code, the data mentioned above in the data section has to be downloaded. Make sure to place all data in the root data folder (for details look below) and put all datafiles from the CMU Movie dataset into a folder named `MovieSummaries`. For the MovieLens dataset put all files in a folder named `ml-32m`.
+To use the code, the data mentioned above in the data section has to be downloaded. Make sure to place all data in the root data folder (for details look below) and put all datafiles from the CMU Movie dataset into a folder named `MovieSummaries`. For the MovieLens dataset put all files in a folder named `ml-32m`. To see our inital analysis and data pipeline create a conda environment as described above and run all cells of our `result.ipynb` on the source level as shown below.
 
 
 
@@ -142,6 +142,4 @@ The directory structure of our project looks like this:
 - [MovieLens 32M Dataset](https://grouplens.org/datasets/movielens/#:~:text=for%20new%20research-,MovieLens%2032M,-MovieLens%2032M%20movie) (`ml-32m`)
 
 
-For each dataset, download the zip file and place it in the root level `data` directory. Do NOT rename the unzipped folder.
-
-Create folder `data/processed` to store the processed datasets. You need this or else the merging script will fail.
+For each dataset, download the zip file and place it in the root level `data` directory, as described above.
