@@ -1,7 +1,6 @@
 ## Research Questions:
 
 #### What are the predominant emotional tones used in films and how do they vary across different movie genres?  
-- 
 
 
 #### How has the emotional tone of films evolved over time within each genre?  
