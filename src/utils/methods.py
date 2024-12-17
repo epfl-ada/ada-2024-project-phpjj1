@@ -19,27 +19,27 @@ def get_list(x):
     return list(x.values())
 
 
-def prepare_heatmap(emotions_df):
-    # Expand the genres into individual rows
-    emotions_df_expanded = emotions_df.explode('Genres')
-    
-    # Count the frequency of each genre
-    genre_counts = emotions_df_expanded['Genres'].value_counts()
-    
-    # Get the top 9 genres based on the frequency
-    top_genres = genre_counts.nlargest(9).index
-    
-    # Calculate the mean emotion for each genre
-    emotion_data = emotions_df_expanded.groupby('Genres')[['disgust', 'fear', 'anger', 'neutral', 'sadness', 'surprise', 'joy']].mean()
-    
-    # Group all other genres into 'Others'
-    emotion_data['Genre'] = emotion_data.index
-    emotion_data.loc[~emotion_data['Genre'].isin(top_genres), 'Genre'] = 'Others'
-    
-    # Aggregate the 'Others' genres and recalculate proportions
-    emotion_data_grouped = emotion_data.groupby('Genre').sum()
-    emotion_data_grouped = emotion_data_grouped.div(emotion_data_grouped.sum(axis=1), axis=0)
-    return emotion_data, emotion_data_grouped
+# def prepare_heatmap(emotions_df):
+#     # Expand the genres into individual rows
+#     emotions_df_expanded = emotions_df.explode('Genres')
+#     
+#     # Count the frequency of each genre
+#     genre_counts = emotions_df_expanded['Genres'].value_counts()
+#     
+#     # Get the top 9 genres based on the frequency
+#     top_genres = genre_counts.nlargest(9).index
+#     
+#     # Calculate the mean emotion for each genre
+#     emotion_data = emotions_df_expanded.groupby('Genres')[['disgust', 'fear', 'anger', 'neutral', 'sadness', 'surprise', 'joy']].mean()
+#     
+#     # Group all other genres into 'Others'
+#     emotion_data['Genre'] = emotion_data.index
+#     emotion_data.loc[~emotion_data['Genre'].isin(top_genres), 'Genre'] = 'Others'
+#     
+#     # Aggregate the 'Others' genres and recalculate proportions
+#     emotion_data_grouped = emotion_data.groupby('Genre').sum()
+#     emotion_data_grouped = emotion_data_grouped.div(emotion_data_grouped.sum(axis=1), axis=0)
+#     return emotion_data, emotion_data_grouped
 
 
 # Converts a given date to datetime
