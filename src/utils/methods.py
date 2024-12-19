@@ -10,6 +10,16 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
+
+
+
+
+################### Q1 ##################
+
+########################################
+
+
+
 # Helper function to replace the dictionaries with lists
 def str_to_list(str):
     return ast.literal_eval(str)
