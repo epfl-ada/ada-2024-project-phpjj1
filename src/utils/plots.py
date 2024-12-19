@@ -110,8 +110,14 @@ def find_significant_emotions_by_genre(genre_emotion_mean_df, weight_avg, emotio
 
     
 ########### Q2 ###########
-def plot_emotions_by_time(emotions_by_time):
+def plot_emotions_by_time(emotion_by_time):
+    """
+    Plots the time series of different emotions.
+    """
     plt.figure(figsize=(12, 6))
     for column in emotion_by_time.columns:
         plt.plot(emotion_by_time.index, emotion_by_time[column], label=column)
     plt.legend(title='Emotions', loc='best')
+    plt.title('Emotions Over Time')  # Title for the plot
+    plt.xlabel('Year')  # Label for the x-axis
+    plt.ylabel('Emotion')  # Label for the y-axis
