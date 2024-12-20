@@ -9,11 +9,11 @@ In cinema, emotions are not merely a component of storytelling but the foundatio
 Our project primarily utilizes the CMU movie data set, which includes movie plot summaries sourced from Wikipedia, that are used to extract the emotions of a film. This data is enriched with an external dataset containing user ratings. Through this analysis, we aim to show how leveraging emotional narratives can be used to produce the next blockbuster.
 
 ## Research Questions
-- What are the predominant emotional tones used in films and how do they vary across different movie genres?  
-- How has the emotional tone of films evolved over time within each genre?  
-- How does the emotional tone of films influence the selection of actor traits, such as age and gender?  
-- Does the emotional tone of films differ between movies in different languages?  
-- Can films be clustered based on their emotional tone, and do these clusters reveal distinct patterns in consumer ratings?
+1. What are the predominant emotional tones used in films and how do they vary across different movie genres?  
+2. How has the emotional tone of films evolved over time within each genre?  
+3. How does the emotional tone of films influence the selection of actor traits, such as age and gender?  
+4. Does the emotional tone of films differ between movies in different languages?  
+5. Can films be clustered based on their emotional tone, and do these clusters reveal distinct patterns in consumer ratings?
 
 By answering these questions, we hope to provide insights into how emotional tones shape cinematic experiences, influence casting decisions, and connect with audiences globally.
 
@@ -76,15 +76,15 @@ To explore the connection between emotional tones and user ratings, we will clus
 - Create missing visualizations  
 - Code and repository cleaning  
 
-## Organization of Tasks Across the Team
-- **Filippo**: Time Series Analysis and complete emotion detection 
-- **Freeman**: Clustering of emotions and data story
-- **Julian**: Regression analysis and clustering
-- **Sean**: Emotion aggregation and visualizations
-- **Levin**: Regression analysis and data story
+## Tasks Done Across the Team
+- **Filippo**: Mainly performed Time Series Analysis, helped all questions in general, especially with statistical testings, and hierarchial clustering for Q5. Wrote detailed markdown explanations for `results.ipynb`.
+- **Freeman**: Regression task for Question 4, designed data story website.
+- **Julian**: Clustering analysis using KMeans and DBSCAN. Assisted data story.
+- **Sean**: Emotion aggregation and visualizations with some statistical testing for Question 1. Collated everyone's code into `results.ipynb` and modularized helper functions.
+- **Levin**: Running full emotion detection using distilroberta-base model and regression analysis for Question 3. Aided data story.
 
-## Questions for the TA
-N/A
+<!-- ## Questions for the TA -->
+<!-- N/A -->
 
 
 ## Quickstart
@@ -107,7 +107,6 @@ pip install -r pip_requirements.txt
 
 ### How to use the library
 To use the code, the data mentioned above in the data section has to be downloaded. Make sure to place all data in the root data folder (for details look below) and put all datafiles from the CMU Movie dataset into a folder named `MovieSummaries`. For the MovieLens dataset put all files in a folder named `ml-32m`. To see our inital analysis and data pipeline create a conda environment as described above and run all cells of our `result.ipynb` on the source level as shown below.
-
 
 
 ## Project Structure
@@ -139,6 +138,5 @@ The directory structure of our project looks like this:
 
 #### Secondary Datasets:
 - [MovieLens 32M Dataset](https://grouplens.org/datasets/movielens/#:~:text=for%20new%20research-,MovieLens%2032M,-MovieLens%2032M%20movie) (`ml-32m`)
-
 
 For each dataset, download the zip file and place it in the root level `data` directory, as described above.
