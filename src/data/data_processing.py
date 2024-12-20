@@ -198,6 +198,9 @@ def extract_emotion_value(emotion_dict, emotion):
 
 
 def get_emotions(df_clustering):
+    """
+    Produces appropriate data needed for KMeans and DBSCAN.
+    """
     df_clustering = df_clustering.drop(columns=["FreebaseID", "Genres_tuples", "Languages_tuple",
                                                 "Countries_tuples", "ActorGenderFlag", "movieId",
                                                 "ActorGender", "merge_year"])

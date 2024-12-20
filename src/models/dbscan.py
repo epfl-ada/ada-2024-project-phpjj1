@@ -5,6 +5,9 @@ from models.kmeans import *
 
 
 def calculate_sum_of_within_cluster_distances(df_emotions, dbscan):
+    """
+    Calculates sum of of within cluster distances as a metric for cluster quality.
+    """
     total = 0.0
     for label in np.unique(dbscan.labels_):
         if label != -1:  # Ignore noise
@@ -18,6 +21,9 @@ def calculate_sum_of_within_cluster_distances(df_emotions, dbscan):
 
 
 def dbscan_by_epsilon(df, df_emotions, EMOTIONS):
+    """
+    Performs DBSCAN for epsilon grids.
+    """
     eps_list = np.linspace(0.01,0.3, 20)
     for i in range(0, len(eps_list)):
         print("=" * 50)
@@ -35,6 +41,9 @@ def dbscan_by_epsilon(df, df_emotions, EMOTIONS):
 
 
 def filter_clusters_dbscan(df, df_emotions, EMOTIONS):
+    """
+    Filter specific clusters from DBSCAN configuration. 
+    """
     dbscan = DBSCAN(eps=0.03, min_samples=2)
     dbscan_raw = dbscan.fit(df_emotions)
     df_cluster_emotions, cluster_ratings = calculate_cluster_ratings(df, df_emotions, dbscan_raw, EMOTIONS)

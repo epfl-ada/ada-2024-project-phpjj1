@@ -10,6 +10,9 @@ from utils.plots import timeseries_plots
 
 
 def box_jenkins_procedure(data: pd.DataFrame, genre: str):
+    """
+    Perform box and jenkins procedure for time series analysis.
+    """
     tones = data.columns[1:]
     arima_results = {}
     warnings.filterwarnings("ignore")
@@ -44,6 +47,9 @@ def box_jenkins_procedure(data: pd.DataFrame, genre: str):
 
 
 def forecast_series(data: pd.DataFrame, genre: str, results: dict):
+    """
+    Performs time series forecast.
+    """
     tones = data.columns[1:]  
     palette = sns.color_palette("bright", len(tones))  
     forecast_steps = 10
@@ -100,6 +106,9 @@ def forecast_series(data: pd.DataFrame, genre: str, results: dict):
 
 
 def genre_timeseries_analysis(genre_timeseries_df, genres_emotions_mapping):
+    """
+    Overall function that does time series analysis.
+    """
     for genre, emotions in genres_emotions_mapping.items():
         genre_data = genre_timeseries_df[genre_timeseries_df["Genres"] == genre]
         genre_indiv_timeseries_df = genre_data[["merge_year"] + emotions].dropna()
