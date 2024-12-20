@@ -1,6 +1,8 @@
 # Project-phpjj1
 This is the ADA 2024/25 project repository for the group phpjj1.
 
+** The Datastory can be found in the following link: https://ada.freemanjiang.com
+
 # Emotions as the Secret Architects of Cinema
 
 ## Abstract
@@ -113,15 +115,13 @@ The directory structure of our project looks like this:
 │   ├── MovieSummaries                    <- Contains the CMU Movie data
 │
 ├── src                         <- Source code
-│   ├── data                            <- Data directory
-│   ├── models
-│<- Model directory
-│   ├── utils                           <- Utility directory
-│   ├── scripts                         <- Shell scripts
+│   ├── data                            <- Contains the data processing script needed for the analysis
+│   ├── models                          <- Contains .py files for all used models in our project
+│   ├── utils                           <- Contains utility scripts for plots and helper
+│   ├── scripts                         <- Contains the data pipeline used to create the data basis for this project
 │
-├── tests                       <- Tests of any kind
 │
-├── results.ipynb               <- Our result notebook
+├── results.ipynb               <- Our result notebook, containing the analysis conducted to answer our research questions
 ├── .gitignore                  <- List of files ignored by git
 ├── pip_requirements.txt        <- File for installing python dependencies
 └── README.md
