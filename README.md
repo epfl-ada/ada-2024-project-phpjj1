@@ -1,7 +1,7 @@
 # Project-phpjj1
 This is the ADA 2024/25 project repository for the group phpjj1.
 
-** The Datastory can be found in the following link:** https://ada.freemanjiang.com
+**The Datastory can be found in the following link:** https://ada.freemanjiang.com
 
 # Emotions as the Secret Architects of Cinema
 
