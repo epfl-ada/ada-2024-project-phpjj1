@@ -187,6 +187,76 @@ def find_significant_emotions_by_genre(genre_emotion_mean_df, weight_avg, emotio
     plt.tight_layout()
     plt.show()
 
+
+def find_significant_emotions_by_genre_story(genre_emotion_mean_df, weight_avg, emotions, save_path):
+    """
+    Identifies and visualizes statistically significant emotions by genre, based on a one-sample t-test.
+    It compares the mean emotion scores per genre against a specified average (weight_avg) and shows emotions that show significant differences from the average score.
+    Saves the plot as a PNG file.
+    """
+    # Calculate statistically significant emotions
+    stat_significant_emotions = {}
+    for genre in genre_emotion_mean_df.index:
+        genre_emotions = genre_emotion_mean_df.loc[genre, emotions]
+        significant_emotions = []
+        for emotion in emotions:
+            # Perform a one-sample t-test
+            stat, p_value = ttest_1samp(genre_emotion_mean_df[emotion], genre_emotions[emotion])
+            if p_value / 2 < 0.05 and genre_emotions[emotion] > weight_avg[emotion]:
+                significant_emotions.append(emotion)
+        stat_significant_emotions[genre] = significant_emotions
+
+    # Create subplots
+    n_genres = len(genre_emotion_mean_df.index)
+    n_cols = 3  # Number of columns for subplots
+    n_rows = (n_genres + n_cols - 1) // n_cols  # Calculate rows needed
+
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(20, 6 * n_rows), constrained_layout=True)
+    axes = axes.flatten()  # Flatten axes for easy indexing
+
+    for i, (genre, significant_emotions) in enumerate(stat_significant_emotions.items()):
+        genre_emotions = genre_emotion_mean_df.loc[genre, emotions]
+        ax = axes[i]
+
+        # Set colors: blue 500 for significant emotions, zinc 700 for non-significant ones
+        colors = ["#3b82f6" if emotion in significant_emotions else "#374151" for emotion in emotions]  # Blue 500 and Zinc 700
+
+        # Create barplot with Seaborn
+        sns.barplot(
+            x=emotions,
+            y=genre_emotions.values,
+            palette=colors,
+            ax=ax,
+            linewidth=0  # Remove white borders
+        )
+
+        # Customize plot appearance
+        ax.set_title(genre.capitalize(), fontsize=16, color="white")  # Genre-specific title
+        ax.set_xlabel("Emotions", fontsize=10, color="white")
+        ax.set_ylabel("Score", fontsize=10, color="white")
+        ax.tick_params(colors="white")
+        ax.set_xticklabels(emotions, rotation=45, ha="right", color="white")
+        ax.spines["bottom"].set_color("white")
+        ax.spines["left"].set_color("white")
+        ax.grid(axis="y", linestyle="--", color="gray", linewidth=0.5)
+
+        # Set transparent background
+        ax.set_facecolor((0, 0, 0, 0))
+
+    # Hide unused subplots
+    for j in range(i + 1, len(axes)):
+        axes[j].axis("off")
+
+    # Set overall title
+    fig.patch.set_alpha(0)  # Transparent background
+    plt.suptitle("Statistically Significant Emotions by Genre", fontsize=16, color="white")
+
+    # Save the plot as a PNG file
+    plt.savefig("significant_emotions_per_genre.png", dpi=300, transparent=True)
+    plt.close(fig)  # Close the figure to free memory
+
+
+
     
 ########### Q2 ###########
 def plot_emotions_by_time(emotion_by_time):
