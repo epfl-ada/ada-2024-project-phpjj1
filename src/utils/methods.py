@@ -5,15 +5,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-
-
-
-################### Q1 ##################
-
-########################################
-
-
-
 # Helper function to replace the dictionaries with lists
 def str_to_list(str):
     return ast.literal_eval(str)
@@ -84,3 +75,11 @@ def calculate_age_non_negative(df, birth_date, movie_date):
         return df['ActorAge'].mean()
     age = movie_date.year - birth_date.year - ((movie_date.month, movie_date.day) < (birth_date.month, birth_date.day))
     return age if 0 < age < 103 else df['ActorAge'].mean()
+
+
+################# Q4 #################
+def convert_to_percentage(emotions):
+    """
+    Convert emotional decimal values to percentages.
+    """
+    return {k: v * 100 for k, v in emotions.items()}

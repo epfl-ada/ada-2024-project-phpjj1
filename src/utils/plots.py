@@ -235,3 +235,41 @@ def plot_emotion_language_distribution(df_languages, language_count):
     plt.suptitle('Emotional Distributions for Most Popular Movie Languages', fontsize=16, y=1.02)
     plt.tight_layout()
     plt.show()
+
+
+def plot_significant_language_per_emotion(regression_results, EMOTIONS):
+    # Plot significant parameters for each emotion
+    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(15, 15))
+    axes = axes.flatten()
+
+    # Find global min and max for consistent scale
+    all_params = []
+    for emotion in EMOTIONS:
+        significant_params = regression_results[emotion]['significant_params']
+        params_no_intercept = significant_params[1:]
+        all_params.extend(params_no_intercept.values)
+    global_min, global_max = min(all_params), max(all_params)
+
+    for i, emotion in enumerate(EMOTIONS):
+        if i < len(axes):
+            significant_params = regression_results[emotion]['significant_params']
+            
+            # Don't include intercept
+            params_no_intercept = significant_params[1:]  
+            params_sorted = params_no_intercept.sort_values(ascending=True)
+
+            y_labels = params_sorted.index.astype(str).str.extract(r'\[T\.(.*?)\]')[0]
+
+            # Create bar plot
+            sns.barplot(x=params_sorted.values, 
+                    y=y_labels, 
+                    ax=axes[i])
+            
+            axes[i].set_title(f'{emotion.capitalize()}\nR² = {regression_results[emotion]["r_squared"]:.3f}')
+            axes[i].set_xlabel('Effect size (%)')
+            axes[i].set_ylabel('Language')
+            axes[i].set_xlim(global_min, global_max)  # consistent scale
+
+    for j in range(len(EMOTIONS), len(axes)):
+        axes[j].axis('off')
+    plt.tight_layout()

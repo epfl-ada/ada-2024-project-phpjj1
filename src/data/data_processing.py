@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from utils.methods import *
 
@@ -118,3 +119,32 @@ def is_invalid_unicode(text: str):
 def clean_lang_list(languages: list[str]):
     """Remove invalid languages from a list of languages"""
     return [l for l in languages if not is_invalid_unicode(l)]
+
+
+def prepare_data_for_analysis(df_to_prepare, EMOTIONS):
+    """
+    Prepare the data for statistical analysis by:
+    1. Expanding the language lists into separate rows
+    2. Creating emotion columns from the dictionary
+    3. Filtering for languages with sufficient data
+    """
+    df_new = df_to_prepare.copy()
+
+    # Get rid of rows without emotion data
+    df_new = df_new[df_new['distilbert_emotions'].apply(lambda x: isinstance(x, dict) and x != {})]
+
+    # Multiply all the emotions by 100 so we can work with percentages
+    df_new['distilbert_emotions'] = df_new['distilbert_emotions'].apply(convert_to_percentage)
+
+    # Explode the Languages column to create separate rows for each language
+    df_new = df_new.explode('Languages').reset_index(drop=True)
+
+    # Create separate columns for each emotion
+    for emotion in EMOTIONS:
+        df_new[emotion] = df_new['distilbert_emotions'].apply(lambda x: x.get(emotion, np.nan))
+
+    # Filter for languages with at least 100 movies
+    language_counts = df_new['Languages'].value_counts()
+    valid_languages = language_counts[language_counts >= 100].index
+    df_filtered = df_new[df_new['Languages'].isin(valid_languages)]
+    return df_filtered
