@@ -70,6 +70,76 @@ def plot_emotion_scores_by_genre(genre_emotion_mean_df, weight_avg, emotions):
     plt.show()
 
 
+def plot_emotion_scores_by_genre_story(genre_emotion_mean_df, weight_avg, emotions, save_path):
+    """
+    Plots emotion scores across different movie genres with a comparison to the weighted average for each emotion.
+    The plot will have a transparent background, white labels, and use a custom color palette.
+    """
+    # Custom color palette
+    color_palette = {
+        "Joy": "Yellow",
+        "Surprise": "Orange",
+        "Anger": "Red",
+        "Fear": "Purple",
+        "Disgust": "Green",
+        "Sadness": "Blue",
+        "Neutral": "Grey"
+    }
+
+    n_emotions = len(emotions)
+    n_cols = 4  # Number of columns for subplots
+    n_rows = -(-n_emotions // n_cols)  # Calculate rows needed, using ceiling division
+
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(15, 5 * n_rows), constrained_layout=True)
+    axes = axes.flatten()  # Flatten axes to easily iterate over them
+
+    # Iterate through emotions and create subplots
+    for i, emotion in enumerate(emotions):
+        ax = axes[i]
+        color = color_palette.get(emotion.capitalize(), "skyblue")  # Use palette color if available
+        sns.barplot(
+            x=genre_emotion_mean_df.index,
+            y=genre_emotion_mean_df[emotion],
+            ax=ax,
+            color=color,
+            edgecolor=None,  # Disable white borders around the bars
+            linewidth=0
+        )
+        ax.axhline(y=weight_avg[emotion], color='red', linestyle='--', label='Average Score')
+        ax.set_title(f"{emotion.capitalize()} Scores Across Movie Genres", fontsize=12, color="white")
+        ax.set_xlabel('Genres', fontsize=10, color="white")
+        ax.set_ylabel(f"{emotion.capitalize()} Score", fontsize=10, color="white")
+        ax.set_xticks(range(len(genre_emotion_mean_df)))
+        ax.set_xticklabels(genre_emotion_mean_df.index, rotation=45, ha='right', color="white")
+        ax.tick_params(colors="white")
+        ax.spines['bottom'].set_color("white")
+        ax.spines['left'].set_color("white")
+        ax.grid(axis='y', color='gray', linestyle='--', linewidth=0.5)
+        legend = ax.legend(frameon=False, loc="upper right")
+        for text in legend.get_texts():
+            text.set_color("white")
+
+    # Turn off empty subplots
+    for j in range(len(emotions), len(axes)):
+        axes[j].axis('off')
+
+    # Set transparent background and white labels
+    fig.patch.set_alpha(0)  # Transparent figure background
+    for ax in axes:
+        ax.set_facecolor((0, 0, 0, 0))  # Transparent subplot background
+
+    # Set overall title
+    plt.suptitle(
+        "Emotion Scores by Genre: Comparison with Weighted Average",
+        fontsize=16,
+        color="white"
+    )
+
+    # Save the plot as an image
+    plt.savefig(save_path, dpi=300, transparent=True)
+    plt.close(fig)  # Close the figure to free memory
+
+
 def find_significant_emotions_by_genre(genre_emotion_mean_df, weight_avg, emotions):
     """
     Identifies and visualizes statistically significant emotions by genre, based on a one-sample t-test.
