@@ -16,6 +16,9 @@ def hierarchial(df_hierarchial, EMOTIONS):
 
 
 def compute_inner_cluster_distances(labels, distances):
+    """
+    Computes inner cluster distances within the same clusters.
+    """
     unique_clusters = np.unique(labels)
     inner_distances = {}
     for cluster in unique_clusters:
@@ -29,6 +32,9 @@ def compute_inner_cluster_distances(labels, distances):
 
 
 def assign_clusters(distance_matrix, linkage_matrix, cluster_df):
+    """
+    Assign data point to its corresponding cluster.
+    """
     cutoff = 0.36
     cluster_labels = fcluster(linkage_matrix, t=cutoff, criterion='distance')
     cluster_df['cluster'] = cluster_labels
