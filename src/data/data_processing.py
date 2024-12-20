@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from utils.methods import *
+from utils.helpers import *
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
