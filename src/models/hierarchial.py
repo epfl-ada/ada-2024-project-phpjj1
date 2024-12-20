@@ -1,6 +1,6 @@
 import numpy as np
-from scipy.cluster.hierarchy import linkage
-from scipy.spatial.distance import pdist
+from scipy.cluster.hierarchy import linkage, fcluster
+from scipy.spatial.distance import pdist, squareform
 
 
 def hierarchial(df_hierarchial, EMOTIONS):
@@ -23,3 +23,11 @@ def compute_inner_cluster_distances(labels, distances):
             intra_dist = 0  # Single-point cluster
         inner_distances[cluster] = intra_dist
     return inner_distances
+
+
+def assign_clusters(distance_matrix, linkage_matrix, cluster_df):
+    cutoff = 0.36
+    cluster_labels = fcluster(linkage_matrix, t=cutoff, criterion='distance')
+    cluster_df['cluster'] = cluster_labels
+    distance_square = squareform(distance_matrix)
+    return cluster_labels, distance_square
