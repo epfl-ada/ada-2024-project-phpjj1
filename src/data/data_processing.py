@@ -1,5 +1,4 @@
 import pandas as pd
-from utils.methods import *
 
 
 ################### Q1 ##################
@@ -28,3 +27,29 @@ def get_time_series_data(emotions_df, emotions):
     })
     emotion_by_time.columns = emotions
     return emotion_by_time
+
+
+def get_movie_counts_by_time(emotions_df):
+    movie_counts_by_time = emotions_df.groupby(['merge_year']).agg(
+        counts=('merge_year', 'size')
+    )
+    return movie_counts_by_time
+
+
+def get_timeseries_by_genre(emotions_df, genre_count, genres_emotions_mapping, emotions):
+    columns_needed = ['Plot', 'Genres', 'merge_year']
+    df_tone = emotions_df.dropna(subset=['Plot'])[columns_needed + emotions]
+
+    relevant_genres = genre_count[genre_count>2000].index
+    df_ex_gen = df_tone.explode('Genres')
+    time_series_df = df_ex_gen[df_ex_gen['Genres'].isin(relevant_genres)].reset_index(drop=True)
+
+    grouped_df = time_series_df.groupby(['Genres', 'merge_year'])[emotions].mean().reset_index()
+
+
+    genre_timeseries_df = grouped_df[(grouped_df["Genres"].isin(genres_emotions_mapping.keys())) &
+                            ((grouped_df["merge_year"] >= 1925) & (grouped_df["merge_year"] < 2012))]
+    return genre_timeseries_df
+
+
+################### Q3 ##################

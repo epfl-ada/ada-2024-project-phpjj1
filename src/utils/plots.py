@@ -1,7 +1,9 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import ttest_1samp
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
 
 ########### Q1 ###########
@@ -112,7 +114,7 @@ def find_significant_emotions_by_genre(genre_emotion_mean_df, weight_avg, emotio
 ########### Q2 ###########
 def plot_emotions_by_time(emotion_by_time):
     """
-    Plots the time series of different emotions.
+    Plots the time series of different emotions in a single plot.
     """
     plt.figure(figsize=(12, 6))
     for column in emotion_by_time.columns:
@@ -121,3 +123,49 @@ def plot_emotions_by_time(emotion_by_time):
     plt.title('Emotions Over Time')  # Title for the plot
     plt.xlabel('Year')  # Label for the x-axis
     plt.ylabel('Emotion')  # Label for the y-axis
+
+
+def plot_indiv_emotions_by_time(emotions_by_time):
+    """
+    Plots the time series of individual emotions in subplots.
+    """
+    num_emotions = len(emotions_by_time.columns)
+    fig, axes = plt.subplots(2, 4, figsize=(16, 8))
+    axes = axes.flatten()
+    colors = sns.color_palette("tab10", len(emotions_by_time.columns))
+
+    for ax, column, color in zip(axes, emotions_by_time.columns, colors):
+        ax.plot(emotions_by_time.index, emotions_by_time[column], color=color)
+        ax.set_title(column)
+
+    for ax in axes[num_emotions: ]:
+        ax.axis('off')
+
+    plt.tight_layout()
+    plt.show()
+
+
+def timeseries_plots(data: pd.DataFrame, genre: str):
+    tones = data.columns[1:]
+    palette = sns.color_palette("bright", len(tones))
+
+    plt.figure(figsize=(12, 6))
+    for tone, color in zip(tones, palette):
+        sns.lineplot(data=data, x="merge_year", y=tone, label=tone, color= color)
+    plt.title(f"{genre} Emotions Over Time")
+    plt.xlabel("Year")
+    plt.ylabel("Emotion Value")
+    plt.legend(title="Emotion", bbox_to_anchor=(1.05, 1), loc="upper left")
+    plt.tight_layout()
+    plt.grid()
+    plt.show()
+
+    for tone, color in zip(tones, palette):
+        fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+        plot_acf(data[tone], lags = 20, ax = axes[0], title = f"ACF of {tone} in {genre} Genre", color = color)
+        plot_pacf(data[tone], lags = 20, ax = axes[1], title = f"PACF of {tone} in {genre} Genre", color = color)
+
+        axes[0].lines[0].set_color(color)  
+        axes[1].lines[0].set_color(color)
+        plt.tight_layout()
+        plt.show()
