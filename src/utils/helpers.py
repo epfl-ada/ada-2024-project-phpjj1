@@ -1,4 +1,4 @@
-# Includes methods that are used in the data pipeline
+# Includes helper functions that are commonly used for most tasks
 import ast
 import pandas as pd
 import matplotlib.pyplot as plt
