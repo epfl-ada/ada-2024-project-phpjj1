@@ -10,6 +10,7 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from pandas.plotting import parallel_coordinates
+from scipy.cluster.hierarchy import dendrogram
 
 
 ########### Q1 ###########
@@ -429,4 +430,13 @@ def plot_radar_chart(data, title):
     ax.set_xticks(angles[:-1])
     ax.set_xticklabels(categories)
     plt.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
+    plt.show()
+
+
+def plot_dendrogram(cluster_df, linkage_matrix):
+    plt.figure(figsize=(12, 8))
+    dendrogram(linkage_matrix, labels=cluster_df.index, orientation='top')
+    plt.title('Hierarchical Clustering Dendrogram (Average Linkage, Cosine Distance) on Sample')
+    plt.xlabel('Films')
+    plt.ylabel('Cosine Distance')
     plt.show()
