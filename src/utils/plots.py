@@ -38,6 +38,13 @@ def plot_heatmap(genre_emotion_mean_df):
     plt.show()
 
 
+def plot_num_movies_per_year(emotions_df):
+    sns.histplot(emotions_df['merge_year'], kde=False)
+    plt.xlabel('Year')  # Change x-axis label
+    plt.title('Number of Movies per Year')  # Set plot title
+    plt.show()
+
+
 def plot_emotion_scores_by_genre(genre_emotion_mean_df, weight_avg, emotions):
     """
     Plots emotion scores across different movie genres with a comparison to the weighted average for each emotion.
@@ -103,11 +110,11 @@ def find_significant_emotions_by_genre(genre_emotion_mean_df, weight_avg, emotio
             color=['green' if emotion in significant_emotions else 'gray' for emotion in emotions], 
             ax=ax
         )
-        ax.set_title(f"Statistically Significant Emotions for {genre}")
+        ax.set_title(genre.capitalize())
         ax.set_xlabel("Emotions")
         ax.set_ylabel("Score")
         ax.set_xticks(np.arange(len(emotions)))
-        ax.set_xticklabels(emotions, rotation=0)
+        ax.set_xticklabels(emotions, rotation=45, ha='right')
 
     # Hide any unused subplots
     for j in range(i + 1, len(axes)):
