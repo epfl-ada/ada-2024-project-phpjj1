@@ -1,4 +1,5 @@
 import pandas as pd
+from utils.methods import *
 
 
 ################### Q1 ##################
