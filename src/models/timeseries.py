@@ -105,4 +105,6 @@ def genre_timeseries_analysis(genre_timeseries_df, genres_emotions_mapping):
         genre_indiv_timeseries_df = genre_data[["merge_year"] + emotions].dropna()
         timeseries_plots(genre_indiv_timeseries_df, genre)
         genre_timeseries_result = box_jenkins_procedure(genre_indiv_timeseries_df, genre)
+        if genre == 'Action':
+            print(genre_timeseries_result['anger'].summary())
         forecast_series(genre_indiv_timeseries_df, genre, genre_timeseries_result)

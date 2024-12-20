@@ -191,3 +191,41 @@ def perform_pca(df_emotions, n_components=7):
     total_variance = sum(pca.explained_variance_ratio_)
     print(total_variance)
     print("Explained Variance Ratio per Principal Component: ", (explained_variance_ratio/total_variance))
+
+
+# def get_emotions(df_clustering):
+#     df_clustering = df_clustering.drop(columns = ["FreebaseID", "Genres_tuples", "Languages_tuple", "Countries_tuples", "ActorGenderFlag", "movieId", "ActorGender", "merge_year"])
+#     assert df_clustering["distilbert_emotions"].isna().sum() == df_clustering["Plot"].isna().sum()
+#     df_clustering = df_clustering.dropna(subset = ["distilbert_emotions"])
+#     df_clustering["distilbert_emotions"] = df_clustering["distilbert_emotions"].apply(conv_to_dict)
+#     print(df_clustering["distilbert_emotions"][0].keys())
+#     df_clustering["disgust"] = df_clustering["distilbert_emotions"].apply(lambda x: x["disgust"])
+#     df_clustering["fear"] = df_clustering["distilbert_emotions"].apply(lambda x: x["fear"])
+#     df_clustering["anger"] = df_clustering["distilbert_emotions"].apply(lambda x: x["anger"])
+#     df_clustering["neutral"] = df_clustering["distilbert_emotions"].apply(lambda x: x["neutral"])
+#     df_clustering["sadness"] = df_clustering["distilbert_emotions"].apply(lambda x: x["sadness"])
+#     df_clustering["surprise"] = df_clustering["distilbert_emotions"].apply(lambda x: x["surprise"])
+#     df_clustering["joy"] = df_clustering["distilbert_emotions"].apply(lambda x: x["joy"])
+#     df_emotions = df_clustering[["disgust","fear","anger","neutral","sadness", "surprise","joy" ]]
+#     emotions_columns = ["disgust","fear","anger","neutral","sadness", "surprise","joy"]
+#     return df_emotions
+def extract_emotion_value(emotion_dict, emotion):
+    return emotion_dict.get(emotion, 0)
+
+
+def get_emotions(df_clustering):
+    df_clustering = df_clustering.drop(columns=["FreebaseID", "Genres_tuples", "Languages_tuple",
+                                                "Countries_tuples", "ActorGenderFlag", "movieId",
+                                                "ActorGender", "merge_year"])
+    assert df_clustering["distilbert_emotions"].isna().sum() == df_clustering["Plot"].isna().sum()
+    df_clustering = df_clustering.dropna(subset=["distilbert_emotions"])
+    df_clustering["distilbert_emotions"] = df_clustering["distilbert_emotions"].apply(conv_to_dict)
+    print(df_clustering["distilbert_emotions"][0].keys())
+
+    emotions = ["disgust", "fear", "anger", "neutral", "sadness", "surprise", "joy"]
+    for emotion in emotions:
+        df_clustering[emotion] = df_clustering["distilbert_emotions"].apply(
+            lambda x: extract_emotion_value(x, emotion)
+        )
+    df_emotions = df_clustering[emotions]
+    return df_emotions
