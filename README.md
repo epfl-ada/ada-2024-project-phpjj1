@@ -1,7 +1,7 @@
 # Project-phpjj1
 This is the ADA 2024/25 project repository for the group phpjj1.
 
-# How Movies are Built: The Emotional Landscape in Cinema
+# Emotions as the Secret Architects of Cinema
 
 ## Abstract
 In cinema, emotions are not merely a component of storytelling but the foundation upon which entire films are constructed. This project aims to analyze how movies are built based on different emotions across genres and how these emotions have evolved over time. Additionally, it seeks to uncover relationships between emotional tones in movies and factors such as language, as well as the age and gender of involved actors. To fully understand the impact of emotions in films, we will also explore how these emotions influence a movie’s success, as measured by user ratings.
@@ -29,27 +29,22 @@ To uncover how films use emotions and analyze their evolution and impact, we fir
 - **[j-hartmann/emotion-english-distilroberta-base](https://huggingface.co/j-hartmann/emotion-english-distilroberta-base)**:  
   This model predicts Ekman's six basic emotions (anger, disgust, fear, joy, sadness, surprise) along with a neutral class, making it ideal for capturing foundational emotional elements in movie plots.
 
-- **[SamLowe/roberta-base-go_emotions](https://huggingface.co/SamLowe/roberta-base-go_emotions)**:  
-  Predicts 28 emotions, such as range of emotions like amusement, excitement, curiosity, and joy. This allows us to analyze a broader spectrum of emotional expression in film narratives.
-
-- **NRCLex** ([source](https://pypi.org/project/NRCLex/)):  
-  Predicts fear, anger, anticipation, trust, surprise, positive/negative sentiment, sadness, disgust, and joy.
-
-For Milestone 2, we will evaluate each model's performance to determine the most suitable approach for our dataset. Additionally, for now in Milestone 2, we are going to run models on subset of plot summaries due to high computational cost. We will then choose the final model based on evaluations and run it on the whole summary plot data using external resources for Milestone 3.
+We ran emotion detection using Google Colab. We have a data processing pipeline which can be found at `src/scripts/data_pipeline_colab.ipynb` or `src/scripts/data_pipeline.ipynb` if desired to run locally.
 
 ### Aggregation and Comparison
 To explore the connections between genres and emotions, the extracted emotional data is aggregated at the genre level. The resulting emotional profiles are then compared across genres to identify differences and patterns.
 
 ### Time Series Analysis
-To examine how the use of emotions has evolved across genres over time, we will perform a time series analysis. Emotional scores for each genre will be aggregated by release year, enabling us to identify trends and shifts in emotional tones over the decades.
+To examine how the use of emotions has evolved across genres over time, we performed a time series analysis. Emotional scores for each genre are aggregated by release year, enabling us to identify trends and shifts in emotional tones over the decades.
 
 ### Regression Analysis
-The impact of emotions on the actor traits age and gender is analyzed using regression analysis. This method assesses relationships between the emotional tones of films and the age and gender of involved actors. Additionally, regression analysis will be used to explore connections between movie languages and emotional tones.
+The impact of emotions on the actor traits age and gender is analyzed using regression analysis. This method assesses relationships between the emotional tones of films and the age and gender of involved actors. Additionally, regression analysis is used to explore connections between movie languages and emotional tones.
 
 ### Clustering
-To explore the connection between emotional tones and user ratings, we will cluster movies based on their emotional profiles. Patterns between clusters and user ratings are examined to determine how the different emotions influence user ratings and how the influence may vary across genres.
+To explore the connection between emotional tones and user ratings, we clustered movies based on their emotional profiles. Patterns between clusters and user ratings are examined to determine how the different emotions influence user ratings and how the influence may vary across genres.
 
 ## Timeline
+For this project, we followed the below timeline:
 
 ### 15.11.2024 - 22.11.2024
 - Homework
@@ -86,7 +81,6 @@ To explore the connection between emotional tones and user ratings, we will clus
 <!-- ## Questions for the TA -->
 <!-- N/A -->
 
-
 ## Quickstart
 
 ```bash
@@ -120,7 +114,8 @@ The directory structure of our project looks like this:
 │
 ├── src                         <- Source code
 │   ├── data                            <- Data directory
-│   ├── models                          <- Model directory
+│   ├── models
+│<- Model directory
 │   ├── utils                           <- Utility directory
 │   ├── scripts                         <- Shell scripts
 │
