@@ -14,6 +14,12 @@ from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
 
 # Helper function to replace the dictionaries with lists
+def str_to_list(str):
+    return ast.literal_eval(str)
+
+
+
+# Helper function to replace the dictionaries with lists
 def conv_to_dict(val): 
     try:
         return ast.literal_eval(val) if pd.notna(val) else {}
@@ -117,6 +123,8 @@ def timeseries_plots(data: pd.DataFrame, genre: str):
         axes[0].lines[0].set_color(color)  
         axes[1].lines[0].set_color(color)
         plt.tight_layout()
+        #Save the plot in this directory proj/data/Q2_plots/acf_pacf/
+        plt.savefig(f"../../data/Q2_plots/acf_pacf/{genre}_{tone}_acf_pacf.png")
         plt.show()
 
 def forecast_series(data: pd.DataFrame, genre: str, results: dict):
@@ -171,9 +179,13 @@ def forecast_series(data: pd.DataFrame, genre: str, results: dict):
         plt.legend(title="Tone", bbox_to_anchor=(1.05, 1), loc="upper left")
         plt.tight_layout()
         plt.grid()
+        plt.savefig(f"../../data/Q2_plots/forecast/{genre}_{tone}_forecast.png")
         plt.show()
     
     return forecast_df
+
+
+
 
 
     
