@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from utils.methods import *
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
 
 ################### Q1 ##################
@@ -148,3 +150,21 @@ def prepare_data_for_analysis(df_to_prepare, EMOTIONS):
     valid_languages = language_counts[language_counts >= 100].index
     df_filtered = df_new[df_new['Languages'].isin(valid_languages)]
     return df_filtered
+
+
+################### Q5 ##################
+def standardize_emotions(df_emotions, EMOTIONS):
+    standardizer = StandardScaler()
+    x_standardized = standardizer.fit_transform(df_emotions)
+    df_emotions_standardized = pd.DataFrame(x_standardized, columns=EMOTIONS)
+    return df_emotions_standardized
+
+
+def perform_pca(df_emotions, n_components=7):
+    pca = PCA(n_components=7)
+    pca.fit(df_emotions)
+
+    explained_variance_ratio = pca.explained_variance_ratio_
+    total_variance = sum(pca.explained_variance_ratio_)
+    print(total_variance)
+    print("Explained Variance Ratio per Principal Component: ", (explained_variance_ratio/total_variance))

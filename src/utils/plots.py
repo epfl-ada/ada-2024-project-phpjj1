@@ -3,7 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import ttest_1samp
+# from sklearn.cluster import KMeans, DBSCAN
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+from pandas.plotting import parallel_coordinates
 
 
 ########### Q1 ###########
@@ -273,3 +279,154 @@ def plot_significant_language_per_emotion(regression_results, EMOTIONS):
     for j in range(len(EMOTIONS), len(axes)):
         axes[j].axis('off')
     plt.tight_layout()
+
+
+########### Q5 ###########
+def plot_stddized_emotion_comparison(df_emotions, df_emotions_standardized):
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(15, 6)) 
+    long_emotions = pd.melt(df_emotions, var_name='Emotion', value_name='Emotion Intensity')
+    long_emotions_standardized = pd.melt(df_emotions_standardized , var_name='Emotion', value_name='Emotion Intensity')
+    ax1= sns.boxplot(x="Emotion", y="Emotion Intensity", ax=axes[0], data=long_emotions)
+    ax1.set_title("Raw")
+    ax2 = sns.boxplot(x="Emotion", y="Emotion Intensity", ax=axes[1],data=long_emotions_standardized)
+    ax2.set_title("Standardized")
+
+
+def plot_emotion_density_comparison(df_emotions, df_emotions_standardized):
+    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(10, 10))
+    axes = axes.flatten()
+    for emotion in df_emotions.columns:
+        ax1 = sns.kdeplot(data=df_emotions, x=emotion, ax=axes[0], label=emotion )
+        ax1.set_title('Raw Emotions Density Plot')
+        ax1.legend()
+    for emotion in df_emotions_standardized.columns:
+        ax2 = sns.kdeplot(data=df_emotions_standardized, x=emotion, ax=axes[1], label=emotion )
+        ax2.set_title('Standardized Emotions Density Plot')
+        ax2.legend()
+
+
+def plot_ratings_distribution(df_emotions, df, EMOTIONS):
+    df_ratings = df_emotions.drop(columns=EMOTIONS)
+    df_ratings["mean_ratings"] = df.loc[df_emotions.index, "mean_ratings"]
+
+    sns.histplot(df_ratings['mean_ratings'], bins=10, kde=True, color='green')
+    plt.title('Distribution of Movie Ratings')
+    plt.xlabel('Rating')
+    plt.ylabel('Count')
+    plt.show()
+
+    print(df_ratings["mean_ratings"].describe())
+
+
+def plot_silhouette_scores(df_emotions_standardized):
+    silhouettes = []
+    # Try multiple k
+    for k in range(2, 21):
+        # Cluster the data and assigne the labels
+        labels = KMeans(n_clusters=k, random_state=10).fit_predict(df_emotions_standardized)
+        # Get the Silhouette score
+        score = silhouette_score(df_emotions_standardized, labels)
+        silhouettes.append({"k": k, "score": score})
+        
+    # Convert to dataframe
+    silhouettes = pd.DataFrame(silhouettes)
+
+    # Plot the data
+    plt.plot(silhouettes.k, silhouettes.score)
+    plt.xlabel("K")
+    plt.ylabel("Silhouette score")
+
+
+def plot_sse(df_emotions_standardized, start=2, end=21):
+    """
+    Plots sum of squared errors for a range of K's.
+    """
+    sse = []
+    for k in range(start, end):
+        # Assign the labels to the clusters
+        kmeans = KMeans(n_clusters=k, random_state=10).fit(df_emotions_standardized)
+        sse.append({"k": k, "sse": kmeans.inertia_})
+
+    sse = pd.DataFrame(sse)
+    # Plot the data
+    plt.plot(sse.k, sse.sse)
+    plt.xlabel("K")
+    plt.ylabel("Sum of Squared Errors")
+
+
+def clustering_pca_visualizations(df_emotions_standardized, km_best_init, n_components=4):
+    pca = PCA(n_components=n_components)
+    X_pca = pca.fit_transform(df_emotions_standardized)
+
+    COLUMNS = 3
+    ROWS = 2
+    fig, axs = plt.subplots(ROWS, COLUMNS, figsize=(10,8), sharey=True, sharex=True)
+    combinations = [[1, 2],[1, 3],[1, 4],[2, 3],[2, 4],[3, 4]]
+
+    for i, combination in enumerate(combinations):
+        current_column = i % COLUMNS
+        current_row = (i)//COLUMNS
+        ax = axs[current_row, current_column]
+
+        ax.scatter(X_pca[:,0], X_pca[:,1], c=km_best_init.labels_, alpha=0.6)
+        ax.set_title(f"PCA {combination[0]} and PC {combination[1]}")
+        plt.xlabel(f'Principal Component {combination[0]}')
+        plt.ylabel(f'Principal Component {combination[1]}')
+        cbar = plt.colorbar(ax.collections[0], ax=ax, label='Cluster')
+        # Plot the centroids
+        for c in km_best_init.cluster_centers_:
+            ax.scatter(c[0], c[1], marker="+", color="red")
+    plt.tight_layout()
+
+
+def clustering_tsne_visualizations(df_emotions_standardized, km_best_init, n_components=2):
+    X_tsne = TSNE(n_components=2, init='pca', learning_rate='auto', random_state=10).fit_transform(df_emotions_standardized)
+
+    COLUMNS = 3
+    ROWS = 2
+    fig, axs = plt.subplots(ROWS, COLUMNS, figsize=(10,8), sharey=True, sharex=True)
+    combinations = [[1, 2],[1, 3],[1, 4],[2, 3],[2, 4],[3, 4]]
+
+    for i, combination in enumerate(combinations):
+        current_column = i % COLUMNS
+        current_row = (i)//COLUMNS
+        ax = axs[current_row, current_column]
+
+
+        ax.scatter(X_tsne[:,0], X_tsne[:,1], c=km_best_init.labels_, alpha=0.6)
+        ax.set_title(f"t-SNE {combination[0]} and t-SNE {combination[1]}")
+        plt.xlabel(f't-SNE {combination[0]}')
+        plt.ylabel(f't-SNE {combination[1]}')
+        cbar = plt.colorbar(ax.collections[0], ax=ax, label='Cluster')
+        # Plot the centroids
+        for c in km_best_init.cluster_centers_:
+            ax.scatter(c[0], c[1], marker="+", color="red")
+
+    plt.tight_layout()
+
+
+def plot_parallel_coordinates(df_cluster_emotions):
+    plt.figure(figsize=(10, 5))
+    parallel_coordinates(df_cluster_emotions, class_column='cluster', colormap=plt.get_cmap("Set2"))
+    plt.title("Parallel Coordinates Plot of Clusters' Emotion Profiles")
+    plt.ylabel("Emotion Value")
+    plt.legend()
+    plt.show()
+
+
+def plot_radar_chart(data, title):
+    categories = data.columns
+    angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+    for i, row in data.iterrows():
+        values = row.tolist() + row.tolist()[:1]
+        ax.plot(angles, values, label=f'Cluster {i}')
+        ax.fill(angles, values, alpha=0.25)
+
+    ax.set_title(title, size=15)
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(categories)
+    plt.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
+    plt.show()
