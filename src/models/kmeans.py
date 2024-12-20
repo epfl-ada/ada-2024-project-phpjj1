@@ -18,8 +18,8 @@ def find_best_init(X, optimal_k):
     return km
 
 
-def calculate_cluster_ratings(df, X, kmeans, EMOTIONS):
-    km = kmeans
+def calculate_cluster_ratings(df, X, cluster_algorithm, EMOTIONS):
+    km = cluster_algorithm
     df_cluster_ratings = X.drop(columns=EMOTIONS)
     df_cluster_emotions = X.copy()
     df_cluster_emotions["cluster"] = km.labels_

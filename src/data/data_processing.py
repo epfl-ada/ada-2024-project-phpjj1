@@ -7,6 +7,9 @@ from sklearn.decomposition import PCA
 
 ################### Q1 ##################
 def get_top_genres_df(df_with_plot, genre_count):
+    """
+    Extracts data points that contains at least 2000 movies for each genre.
+    """
     relevant_genres = genre_count[genre_count > 2000].index
     temp = df_with_plot.explode('Genres')
     df_plot_genres = temp[temp['Genres'].isin(relevant_genres)].reset_index(drop=True)
@@ -16,6 +19,9 @@ def get_top_genres_df(df_with_plot, genre_count):
 
 
 def get_genre_emotion_mean_df(top_genres_df, emotions):
+    """
+    Aggregates top_genres_df by Genres and compute mean of each emotion.
+    """
     temp = top_genres_df.groupby('Genres').agg({
         emotion: ['mean'] for emotion in emotions
     }).reset_index()
@@ -27,6 +33,9 @@ def get_genre_emotion_mean_df(top_genres_df, emotions):
 
 ################### Q2 ##################
 def get_time_series_data(emotions_df, emotions):
+    """
+    Convert dataset suitable for time series analysis.
+    """
     emotion_by_time = emotions_df.groupby('merge_year').agg({
         emotion: ['mean'] for emotion in emotions
     })
@@ -35,6 +44,9 @@ def get_time_series_data(emotions_df, emotions):
 
 
 def get_movie_counts_by_time(emotions_df):
+    """
+    Compute and return number of movies per year.
+    """
     movie_counts_by_time = emotions_df.groupby(['merge_year']).agg(
         counts=('merge_year', 'size')
     )
@@ -42,16 +54,18 @@ def get_movie_counts_by_time(emotions_df):
 
 
 def get_timeseries_by_genre(emotions_df, genre_count, genres_emotions_mapping, emotions):
+    """
+    Returns timeseries for each genre.
+    """
     columns_needed = ['Plot', 'Genres', 'merge_year']
     df_tone = emotions_df.dropna(subset=['Plot'])[columns_needed + emotions]
 
+    # Get data points with 2000 movies at least per genre
     relevant_genres = genre_count[genre_count>2000].index
-    df_ex_gen = df_tone.explode('Genres')
-    time_series_df = df_ex_gen[df_ex_gen['Genres'].isin(relevant_genres)].reset_index(drop=True)
+    df_genres_exploded = df_tone.explode('Genres')
+    time_series_df = df_genres_exploded[df_genres_exploded['Genres'].isin(relevant_genres)].reset_index(drop=True)
 
     grouped_df = time_series_df.groupby(['Genres', 'merge_year'])[emotions].mean().reset_index()
-
-
     genre_timeseries_df = grouped_df[(grouped_df["Genres"].isin(genres_emotions_mapping.keys())) &
                             ((grouped_df["merge_year"] >= 1925) & (grouped_df["merge_year"] < 2012))]
     return genre_timeseries_df
@@ -59,6 +73,9 @@ def get_timeseries_by_genre(emotions_df, genre_count, genres_emotions_mapping, e
 
 ################### Q3 ##################
 def get_character_df(df, emotions):
+    """
+    Returns data suitable for regression in Q3.
+    """
     # Prepare the data for analysis
     # Filter for columns needed for the analysis
     character_df = df[['WikiID', 'merge_year', 'Genres', 'distilbert_emotions', 'ActorAge', 'ActorGender', 'ActorBirthDate', 'ActorGenderFlag']].copy()
@@ -154,6 +171,9 @@ def prepare_data_for_analysis(df_to_prepare, EMOTIONS):
 
 ################### Q5 ##################
 def standardize_emotions(df_emotions, EMOTIONS):
+    """
+    Returns standardized dataset.
+    """
     standardizer = StandardScaler()
     x_standardized = standardizer.fit_transform(df_emotions)
     df_emotions_standardized = pd.DataFrame(x_standardized, columns=EMOTIONS)
@@ -161,6 +181,9 @@ def standardize_emotions(df_emotions, EMOTIONS):
 
 
 def perform_pca(df_emotions, n_components=7):
+    """
+    Performs PCA.
+    """
     pca = PCA(n_components=7)
     pca.fit(df_emotions)
 

@@ -4,6 +4,9 @@ from scipy.spatial.distance import pdist, squareform
 
 
 def hierarchial(df_hierarchial, EMOTIONS):
+    """
+    Performs hierarchial clustering.
+    """
     sample_df = df_hierarchial.sample(500, random_state=42)
     cluster_df = sample_df[EMOTIONS].copy()
 

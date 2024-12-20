@@ -3,14 +3,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import ttest_1samp
-# from sklearn.cluster import KMeans, DBSCAN
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, DBSCAN
 from sklearn.metrics import silhouette_score
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from pandas.plotting import parallel_coordinates
 from scipy.cluster.hierarchy import dendrogram
+from models.kmeans import *
 
 
 ########### Q1 ###########
@@ -180,6 +180,9 @@ def timeseries_plots(data: pd.DataFrame, genre: str):
 
 ########### Q4 ###########
 def plot_language_distribution(language_count):
+    """
+    Plots distribution of languages.
+    """
     language_count[:30].plot(kind='bar', figsize=(15, 7), logy=True)
     plt.title('Distribution of Languages in Movies (Log Scale)')
     plt.xlabel('Languages')
@@ -188,7 +191,9 @@ def plot_language_distribution(language_count):
 
 
 def plot_language_pie_chart(language_count):
-    # Create a pie chart of the top 15 languages plus "Other"
+    """
+    Creates a pie chart of the top 15 languages plus "Other"
+    """
     plt.figure(figsize=(25, 25))
 
     # Get top 15 languages and sum the rest into "Other"
@@ -204,6 +209,9 @@ def plot_language_pie_chart(language_count):
 
 
 def plot_emotion_language_distribution(df_languages, language_count):
+    """
+    Outputs top three emotions for each language using box plots.
+    """
     # Define a color palette for the emotions
     emotion_palette = {
         'anger': 'red',
@@ -245,7 +253,9 @@ def plot_emotion_language_distribution(df_languages, language_count):
 
 
 def plot_significant_language_per_emotion(regression_results, EMOTIONS):
-    # Plot significant parameters for each emotion
+    """
+    Plots significant parameters for each emotion from regressions in Q4.
+    """
     fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(15, 15))
     axes = axes.flatten()
 
@@ -284,6 +294,9 @@ def plot_significant_language_per_emotion(regression_results, EMOTIONS):
 
 ########### Q5 ###########
 def plot_stddized_emotion_comparison(df_emotions, df_emotions_standardized):
+    """
+    Produces box plots that compare emotion intensities between standardized and unstandardized datasets. 
+    """
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(15, 6)) 
     long_emotions = pd.melt(df_emotions, var_name='Emotion', value_name='Emotion Intensity')
     long_emotions_standardized = pd.melt(df_emotions_standardized , var_name='Emotion', value_name='Emotion Intensity')
@@ -294,6 +307,9 @@ def plot_stddized_emotion_comparison(df_emotions, df_emotions_standardized):
 
 
 def plot_emotion_density_comparison(df_emotions, df_emotions_standardized):
+    """
+
+    """
     fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(10, 10))
     axes = axes.flatten()
     for emotion in df_emotions.columns:
@@ -307,6 +323,9 @@ def plot_emotion_density_comparison(df_emotions, df_emotions_standardized):
 
 
 def plot_ratings_distribution(df_emotions, df, EMOTIONS):
+    '''
+    Plots distributions of ratings.
+    '''
     df_ratings = df_emotions.drop(columns=EMOTIONS)
     df_ratings["mean_ratings"] = df.loc[df_emotions.index, "mean_ratings"]
 
@@ -320,6 +339,9 @@ def plot_ratings_distribution(df_emotions, df, EMOTIONS):
 
 
 def plot_silhouette_scores(df_emotions_standardized):
+    """
+    Computes and plots silhouette score for different K.
+    """
     silhouettes = []
     # Try multiple k
     for k in range(2, 21):
@@ -356,6 +378,9 @@ def plot_sse(df_emotions_standardized, start=2, end=21):
 
 
 def clustering_pca_visualizations(df_emotions_standardized, km_best_init, n_components=4):
+    """
+    Plots visualizations of clusters from PCA dimensions.
+    """
     pca = PCA(n_components=n_components)
     X_pca = pca.fit_transform(df_emotions_standardized)
 
@@ -381,6 +406,9 @@ def clustering_pca_visualizations(df_emotions_standardized, km_best_init, n_comp
 
 
 def clustering_tsne_visualizations(df_emotions_standardized, km_best_init, n_components=2):
+    """
+    Plots visualizations of clusters from TSNE dimensions.
+    """
     X_tsne = TSNE(n_components=2, init='pca', learning_rate='auto', random_state=10).fit_transform(df_emotions_standardized)
 
     COLUMNS = 3
@@ -416,6 +444,9 @@ def plot_parallel_coordinates(df_cluster_emotions):
 
 
 def plot_radar_chart(data, title):
+    """
+
+    """
     categories = data.columns
     angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
     angles += angles[:1]
@@ -434,9 +465,66 @@ def plot_radar_chart(data, title):
 
 
 def plot_dendrogram(cluster_df, linkage_matrix):
+    """
+    Plots dendrogram for hierarchial clustering.
+    """
     plt.figure(figsize=(12, 8))
     dendrogram(linkage_matrix, labels=cluster_df.index, orientation='top')
     plt.title('Hierarchical Clustering Dendrogram (Average Linkage, Cosine Distance) on Sample')
     plt.xlabel('Films')
     plt.ylabel('Cosine Distance')
+    plt.show()
+
+
+def plot_radar_chart_sub_plots(data, title, ax):
+    categories = data.columns
+    angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
+    angles += angles[:1]
+
+    # Plot each row of data
+    for i, row in data.iterrows():
+        values = row.tolist() + row.tolist()[:1]
+        ax.plot(angles, values, label=f'Cluster {i}')
+        ax.fill(angles, values, alpha=0.25)
+
+    # Set title and tick labels
+    ax.set_title(title, size=15)
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(categories)
+    # Optionally adjust the radial limits
+    # ax.set_ylim(0, some_max_value)
+    ax.grid(True)
+
+
+def plot_radar_per_epsilon(df, df_emotions, EMOTIONS, positive=False):
+    ROWS = 3
+    COLUMNS = 3
+    fig, axs = plt.subplots(ROWS, COLUMNS, figsize=(15, 10), subplot_kw=dict(polar=True))
+
+# Flatten axs for easier indexing if needed
+    axs = axs.ravel()
+
+# Example combinations or parameters for each subplot
+    combinations = [0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.07]
+
+    for i, eps_val in enumerate(combinations):
+        ax = axs[i]
+        dbscan = DBSCAN(eps=eps_val, min_samples=2)
+        dbscan_raw = dbscan.fit(df_emotions)
+        df_cluster_emotions, cluster_ratings = calculate_cluster_ratings(df, df_emotions, dbscan_raw, EMOTIONS)
+        merged_inner = pd.merge(df_cluster_emotions, cluster_ratings, on='cluster', how='inner')
+        # Filter for the clusters you want to plot
+        if positive == False:
+            filtered_clusters_raw = merged_inner[(merged_inner['rating_movies_count'] > 3) & 
+                                                (merged_inner['mean_ratings'] < 2.5)]
+        else:
+            filtered_clusters_raw = merged_inner[(merged_inner['rating_movies_count'] > 3) & 
+                                                (merged_inner['mean_ratings'] > 3.5)]
+
+        # Plot the radar chart on the given subplot axis
+        plot_radar_chart_sub_plots(filtered_clusters_raw[EMOTIONS],
+                                f"Cluster Emotional Profiles (eps={eps_val})",
+                                ax)
+
+    plt.tight_layout()
     plt.show()

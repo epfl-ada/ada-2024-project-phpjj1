@@ -4,6 +4,9 @@ import statsmodels.api as sm
 
 ############## Q3 ##############
 def character_emotion_regression(target, character_df):
+    """
+    Performs regression between character traits vs emotions.
+    """
     covariates = '~ disgust + fear + anger + sadness + surprise + joy'
     age_mod = smf.ols(formula=f'{target} {covariates}', data=character_df)
     return age_mod.fit()
