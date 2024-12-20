@@ -165,7 +165,73 @@ def timeseries_plots(data: pd.DataFrame, genre: str):
         plot_acf(data[tone], lags = 20, ax = axes[0], title = f"ACF of {tone} in {genre} Genre", color = color)
         plot_pacf(data[tone], lags = 20, ax = axes[1], title = f"PACF of {tone} in {genre} Genre", color = color)
 
-        axes[0].lines[0].set_color(color)  
+        axes[0].lines[0].set_color(color)
         axes[1].lines[0].set_color(color)
         plt.tight_layout()
         plt.show()
+
+
+########### Q4 ###########
+def plot_language_distribution(language_count):
+    language_count[:30].plot(kind='bar', figsize=(15, 7), logy=True)
+    plt.title('Distribution of Languages in Movies (Log Scale)')
+    plt.xlabel('Languages')
+    plt.ylabel('Number of Movies')
+    plt.show()
+
+
+def plot_language_pie_chart(language_count):
+    # Create a pie chart of the top 15 languages plus "Other"
+    plt.figure(figsize=(25, 25))
+
+    # Get top 15 languages and sum the rest into "Other"
+    top_15 = language_count[:15]
+    other = pd.Series({'Other': language_count[15:].sum()})
+    plot_data = pd.concat([top_15, other])
+
+    colors = plt.cm.Set3(np.linspace(0, 1, len(plot_data)))
+
+    plt.pie(plot_data, labels=plot_data.index, autopct='%1.1f%%', colors=colors, textprops={'fontsize': 12})
+    plt.title('Distribution of Languages in Movies')
+    plt.show()
+
+
+def plot_emotion_language_distribution(df_languages, language_count):
+    # Define a color palette for the emotions
+    emotion_palette = {
+        'anger': 'red',
+        'disgust': 'green',
+        'sadness': 'blue',
+        'fear': 'purple',
+        'joy': 'yellow',
+        'surprise': 'orange'
+    }
+
+    # We analyze the emotions of the top 14 languages
+    top_languages = language_count[:14].index
+
+    # For each language, get all the movies that belong to it and plot emotion distributions
+    fig, axes = plt.subplots(nrows=7, ncols=2, figsize=(20, 25))
+    axes = axes.flatten()
+
+    for i, lang in enumerate(top_languages):
+        movies_in_lang = df_languages[df_languages['Languages'].apply(lambda x: lang in x)]
+        distilbert_emotions = movies_in_lang['distilbert_emotions'].dropna()
+
+        # Convert list of dicts to DataFrame for easier plotting
+        distilbert_emotions_df = pd.DataFrame(list(distilbert_emotions))
+
+        # Remove neutral emotion
+        distilbert_emotions_df = distilbert_emotions_df.drop('neutral', axis=1)
+
+        # Get top 3 emotions by mean value
+        top_3_emotions_distilbert = distilbert_emotions_df.mean().nlargest(3).index
+
+        # Plot boxplot for this language with only top 3 emotions
+        sns.boxplot(data=distilbert_emotions_df[top_3_emotions_distilbert], ax=axes[i], palette=emotion_palette)
+        axes[i].set_title(f'Top 3 Emotions Distribution for {lang}')
+        axes[i].set_ylim(0, 1)
+
+    plt.suptitle('Emotional Distributions for Most Popular Movie Languages', fontsize=16, y=1.02)
+    plt.tight_layout()
+    plt.show()

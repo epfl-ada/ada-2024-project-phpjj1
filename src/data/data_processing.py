@@ -8,7 +8,7 @@ def get_top_genres_df(df_with_plot, genre_count):
     temp = df_with_plot.explode('Genres')
     df_plot_genres = temp[temp['Genres'].isin(relevant_genres)].reset_index(drop=True)
     temp = pd.DataFrame(list(df_plot_genres['distilbert_emotions'].apply(conv_to_dict))).reset_index(drop=True)
-    top_genres_df = pd.concat([df_plot_genres, temp], axis=1) 
+    top_genres_df = pd.concat([df_plot_genres, temp], axis=1)
     return top_genres_df
 
 
@@ -20,6 +20,7 @@ def get_genre_emotion_mean_df(top_genres_df, emotions):
     temp.columns = ['Genres'] + emotions + ['count']
     genre_emotion_mean_df = temp.set_index('Genres')
     return genre_emotion_mean_df
+
 
 ################### Q2 ##################
 def get_time_series_data(emotions_df, emotions):
@@ -54,3 +55,66 @@ def get_timeseries_by_genre(emotions_df, genre_count, genres_emotions_mapping, e
 
 
 ################### Q3 ##################
+def get_character_df(df, emotions):
+    # Prepare the data for analysis
+    # Filter for columns needed for the analysis
+    character_df = df[['WikiID', 'merge_year', 'Genres', 'distilbert_emotions', 'ActorAge', 'ActorGender', 'ActorBirthDate', 'ActorGenderFlag']].copy()
+
+    # Drop rows without emotions, age or gender because they are not helpful here
+    print("Number of rows before droping: ", len(character_df))
+    character_df = character_df.dropna(subset=['distilbert_emotions', 'ActorAge', 'ActorGenderFlag'])
+    print("Number of rows after droping: ", len(character_df))
+
+    # Parse relevant attributes from string to correct datatype
+    character_df['ActorAge'] = character_df['ActorAge'].apply(str_to_list)
+    character_df['ActorGender'] = character_df['ActorGender'].apply(str_to_list)
+    character_df['ActorGenderFlag'] = character_df['ActorGenderFlag'].apply(str_to_list)
+
+    # Check if transformations worked properly
+    test_ages = character_df.iloc[0]['ActorAge']
+    print(test_ages)
+    test_gender = character_df.iloc[0]['ActorGender']
+    print(test_gender)
+    test_gender_flag = character_df.iloc[0]['ActorGenderFlag']
+    print(test_gender_flag)
+    print(f"Age entries: {len(test_ages)}, gender entries: {len(test_gender)}, gender flag entries: {len(test_gender_flag)}")
+    # Create aggregations for gender and age of actors
+    exploded_df = character_df.explode('ActorAge')
+    exploded_df = exploded_df.explode('ActorGenderFlag')
+
+    aggregated_df = exploded_df.groupby('WikiID').agg({
+        "ActorAge": "mean",
+        "ActorGenderFlag": "mean"
+    })
+
+    aggregated_df.rename(columns={
+        'ActorAge': 'AgeAvg', 
+        'ActorGenderFlag': 'GenderAvg'
+    }, inplace=True)
+
+    character_df = character_df.merge(aggregated_df, on='WikiID', how='left')
+
+    # Parse emotions from string to dictionary
+    character_df['distilbert_emotions'] = character_df['distilbert_emotions'].apply(conv_to_dict)
+
+    # Check the result
+    test_emotions = character_df.iloc[0]['distilbert_emotions']
+    print(type(test_emotions))
+    for emotion in emotions:
+        character_df[emotion] = character_df['distilbert_emotions'].apply(lambda x: x[emotion])
+    return character_df
+
+
+################### Q4 ##################
+def is_invalid_unicode(text: str):
+    """Check if text contains invalid unicode characters"""
+    try:
+        text.encode('utf-8').decode('utf-8')
+        return False
+    except UnicodeError:
+        return True
+
+
+def clean_lang_list(languages: list[str]):
+    """Remove invalid languages from a list of languages"""
+    return [l for l in languages if not is_invalid_unicode(l)]
